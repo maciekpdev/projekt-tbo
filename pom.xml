@@ -1,0 +1,33 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.example</groupId>
+    <artifactId>tbo-projekt</artifactId>
+    <version>1.0.0</version>
+
+    <properties>
+        <dependency-check-maven.version>12.2.0</dependency-check-maven.version>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.owasp</groupId>
+                <artifactId>dependency-check-maven</artifactId>
+                <version>${dependency-check-maven.version}</version>
+                <configuration>
+                    <dataDirectory>/tmp/owasp</dataDirectory>
+                    <formats>
+                        <format>html</format>
+                        <format>json</format>
+                    </formats>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
