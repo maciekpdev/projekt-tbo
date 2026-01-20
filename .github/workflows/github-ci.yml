@@ -84,30 +84,25 @@ jobs:
     permissions:
       contents: read
       packages: write
-      issues: write
-      security-events: write
+    outputs:
+      image_tag: ${{ steps.set-tag.outputs.tag }} # Przekazujemy tag do następnego joba
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Log in to GHCR
-        run: |
-          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
       - name: Build and Push Docker image
+        id: set-tag
         run: |
           REPO_LOWER=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
-          BRANCH_NAME=$(echo "${GITHUB_REF##*/}" | tr '[:upper:]' '[:lower:]')
-
-          if [ "$BRANCH_NAME" = "main" ]; then
-            TAG="latest"
-          else
-            TAG="beta"
-          fi
-
-          echo "Building image ghcr.io/${{ github.repository_owner }}/$REPO_LOWER:$TAG"
-          docker build -t ghcr.io/${{ github.repository_owner }}/$REPO_LOWER:$TAG .
-          docker push ghcr.io/${{ github.repository_owner }}/$REPO_LOWER:$TAG
+          TAG=$([ "${GITHUB_REF##*/}" = "main" ] && echo "latest" || echo "beta")
+          
+          IMAGE_URL="ghcr.io/${{ github.repository_owner }}/$REPO_LOWER:$TAG"
+          docker build -t $IMAGE_URL .
+          docker push $IMAGE_URL
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
   dast-scan:
     needs: [docker-build]
     runs-on: ubuntu-latest
