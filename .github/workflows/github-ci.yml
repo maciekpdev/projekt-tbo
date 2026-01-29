@@ -88,7 +88,7 @@ jobs:
 
 
   docker-build:
-    needs: [bandit-scan, dependency-check, unit-testing]
+    needs: [bandit-scan, pip-audit, unit-testing]
     runs-on: ubuntu-latest
     permissions:
       contents: read
