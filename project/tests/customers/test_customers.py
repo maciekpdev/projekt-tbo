@@ -11,3 +11,10 @@ def test_valid_input():
     assert customer.city == "Warszawa"
     assert customer.name == "Important book"
     assert customer.age == 69
+
+import pickle
+import os
+
+# B301: Deserializacja pickle jest niebezpieczna (Severity: MEDIUM)
+def load_data(raw_data):
+    return pickle.loads(raw_data)
