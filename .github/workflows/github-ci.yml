@@ -58,31 +58,33 @@ jobs:
         run: |
           python -m pytest project/tests --maxfail=1 --disable-warnings -q
 
-pip-audit:
-  runs-on: ubuntu-latest
-  steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-python@v5
-      with:
-        python-version: '3.11'
+  pip-audit:
+    runs-on: ubuntu-latest
 
-    - name: Install dependencies
-      run: |
-        python -m venv venv
-        source venv/bin/activate
-        pip install -r requirements.txt
-        pip install pip-audit
+    steps:
+      - uses: actions/checkout@v4
 
-    - name: Run pip-audit
-      run: |
-        source venv/bin/activate
-        pip-audit -r requirements.txt -f json > pip-audit-report.json
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
 
-    - name: Upload pip-audit report
-      uses: actions/upload-artifact@v4
-      with:
-        name: pip-audit-report
-        path: pip-audit-report.json
+      - name: Install dependencies
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+          pip install -r requirements.txt
+          pip install pip-audit
+
+      - name: Run pip-audit
+        run: |
+          source venv/bin/activate
+          pip-audit -r requirements.txt -f json > pip-audit-report.json
+
+      - name: Upload pip-audit report
+        uses: actions/upload-artifact@v4
+        with:
+          name: pip-audit-report
+          path: pip-audit-report.json
 
 
   docker-build:
