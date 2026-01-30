@@ -29,6 +29,8 @@ _Wstrzyknięcie mnożenia w parametrze URL powoduje wykonanie kodu Jinja2 i wyś
 ![Wstrzyknięcie klucza](img/supersecret.png)
 _Wstrzyknięcie `{{config.SECRET_KEY}}` pozwala na wyciągnięcie wrażliwego klucza sekretnego aplikacji Flask_
 
+Podatność jest wykrywana pośrednio przez Bandit (użycie Markup).
+
 ## Path Traversal
 
 Do ekranu wyświetlania listy książek dodano krótki opis strony, pobierany z katalogu `static`. W funkcji `list_books()` w pliku `project/books/views.py` wprowadzono podatność Path Traversal polegającą na możliwym uzyskaniu dostępu do dowolnego pliku z katalogu projektu przy wskazaniu odpowiedniego URL. Dodany kod nie weryfikuje nazwy czytanego pliku, co pozwala na wskazanie ścieżki spoza katalogu `static` i wyświetlenie wrażliwych skryptów aplikacji.
@@ -49,5 +51,7 @@ _Normalne wyświetlenie domyślnego, poprawnego opisu do ekranu listy książek_
 
 ![Manipulacja ścieżką pliku](img/init_code.png)
 _Wymuszenie ścieżki pliku `?file=../../project/__init__.py` pozwala na wyświetlenie konfiguracji aplikacji Flask i pozyskanie wrażliwego klucza sekretnego_
+
+Podatność jest wykrywana przez skan DAST.
 
 ---
